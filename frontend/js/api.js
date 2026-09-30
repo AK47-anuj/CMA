@@ -1,19 +1,40 @@
 // MET SCMS - Frontend API Client
-// Handles communication with Express Backend with automatic offline fallback to SCMS_DATA
+// Handles communication with Backend REST API with automatic offline fallback to SCMS_DATA
+//
+// API URL Resolution (production-safe):
+//  1. If window.SCMS_API_BASE_URL is set (e.g., via a config script), use that.
+//  2. If served from the backend (same origin), use relative /api paths.
+//  3. If opened as a local file (file://), fall back to standalone mode.
 
 const ApiClient = {
-  // Determine backend base URL: if served from same host (e.g., port 5000), use relative /api
-  baseUrl: (window.location.port === '5000' || window.location.protocol === 'file:')
-    ? 'http://localhost:5000/api'
-    : (window.location.origin + '/api'),
+  // Production-safe API base URL resolution
+  baseUrl: (() => {
+    // 1. Explicit override via global config (set in index.html or a config.js)
+    if (window.SCMS_API_BASE_URL) {
+      return window.SCMS_API_BASE_URL;
+    }
+    // 2. Local file:// protocol — no backend available
+    if (window.location.protocol === 'file:') {
+      return null; // Will run in standalone/seed mode
+    }
+    // 3. Same-origin (served by the backend): use relative path
+    return window.location.origin + '/api';
+  })(),
 
   isOnline: false,
   checkAttempted: false,
 
   async checkHealth() {
+    if (!this.baseUrl) {
+      this.checkAttempted = true;
+      this.isOnline = false;
+      this.updateConnectionStatusBadge(false);
+      return false;
+    }
+
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1800);
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
       const res = await fetch(`${this.baseUrl}/health`, {
         signal: controller.signal
       });
@@ -52,7 +73,7 @@ const ApiClient = {
       badge.className = 'fixed bottom-3 right-3 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono shadow-md border bg-emerald-50 text-emerald-800 border-emerald-300 transition-all duration-300';
       badge.innerHTML = `
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span class="font-bold">Backend: Online (Port 5000)</span>
+        <span class="font-bold">Backend: Online</span>
       `;
     } else {
       badge.className = 'fixed bottom-3 right-3 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono shadow-md border bg-amber-50 text-amber-800 border-amber-300 transition-all duration-300';
@@ -68,7 +89,7 @@ const ApiClient = {
       await this.checkHealth();
     }
 
-    if (!this.isOnline) {
+    if (!this.isOnline || !this.baseUrl) {
       return { offline: true };
     }
 

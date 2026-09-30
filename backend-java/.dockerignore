@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+
+# Build artifacts
+target/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# Environment
+.env
+.env.example
+
+# Documentation
+README.md
+*.md
+
+# Node (old backend)
+../backend/
+
+# OS
+.DS_Store
+Thumbs.db
