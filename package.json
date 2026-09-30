@@ -1,0 +1,19 @@
+{
+  "name": "cma-smart-college-management-system",
+  "version": "1.0.0",
+  "description": "MET SCMS - Two-Role Academic Management Platform with Separated Frontend and Backend",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "start:backend": "node backend/src/server.js",
+    "dev:backend": "cd backend && npm run dev",
+    "install:backend": "cd backend && npm install"
+  },
+  "keywords": [
+    "cma",
+    "scms",
+    "college-management",
+    "met"
+  ],
+  "author": "MET Bhujbal Knowledge City",
+  "license": "ISC"
+}

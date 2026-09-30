@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>HOD Executive Dashboard — MET Institute of Management</title>
+  <meta name="description" content="Dedicated administrative dashboard for Head of Department (HOD) - MET Institute of Management SCMS."/>
+
+  <!-- Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#3525cd",
+            "primary-container": "#4f46e5",
+            "primary-hover": "#4338ca",
+            "met-red": "#d9252a",
+            "met-red-dark": "#b91c1c",
+            "surface": "#f8f9ff",
+            "surface-container": "#e5eeff",
+            "surface-container-low": "#eff4ff",
+            "surface-container-high": "#dce9ff",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#464555",
+            "outline": "#777587",
+            "outline-variant": "#c7c4d8",
+            "tertiary": "#005338"
+          },
+          fontFamily: {
+            "sans": ["Inter", "sans-serif"],
+            "heading": ["Plus Jakarta Sans", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/custom.css"/>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col">
+
+  <!-- Top Executive Header -->
+  <header class="w-full bg-white border-b border-outline-variant sticky top-0 z-50 shadow-sm">
+    <div class="w-full h-16 flex items-center justify-between px-4 lg:px-8 max-w-7xl mx-auto">
+      
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="h-10 w-10 bg-met-red text-white flex items-center justify-center rounded-lg shadow-sm font-heading font-extrabold text-lg tracking-wider">
+            MET
+          </div>
+          <div class="flex flex-col">
+            <span class="font-heading font-bold text-base text-on-surface leading-tight">Bhujbal Knowledge City</span>
+            <span class="text-[11px] text-on-surface-variant font-medium">MET Institute of Management • HOD Command Nexus</span>
+          </div>
+        </a>
+        <span class="hidden sm:inline-block ml-2 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-100 text-met-red border border-red-200">
+          ROLE: HOD (ADMINISTRATIVE & FINAL AUTHORITY)
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="faculty.html" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface text-primary border border-primary/30 rounded-lg text-xs font-semibold hover:bg-surface-container transition-all">
+          <span class="material-symbols-outlined text-[16px]">switch_account</span>
+          <span>Open Faculty Dashboard →</span>
+        </a>
+        
+        <div class="flex items-center gap-2 p-1.5 px-3 rounded-lg bg-surface border border-outline-variant text-xs">
+          <div class="w-7 h-7 rounded-full bg-met-red text-white flex items-center justify-center font-bold font-heading text-xs">
+            NB
+          </div>
+          <div class="flex flex-col leading-none text-left">
+            <span class="font-bold text-on-surface">Prof. Nilesh Bread</span>
+            <span class="text-[9px] text-met-red font-bold uppercase">Head of Department</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Shell -->
+  <div class="flex-1 flex max-w-7xl w-full mx-auto">
+    
+    <!-- Left Navigation Rail -->
+    <aside class="w-64 flex-shrink-0 bg-white border-r border-outline-variant p-4 space-y-4 hidden md:block">
+      <div class="p-3 rounded-lg bg-surface border border-outline-variant">
+        <div class="text-[10px] font-mono font-bold text-tertiary">TENANT: MET_IOM_DMS</div>
+        <div class="text-xs font-bold text-on-surface mt-0.5">Management Studies (DMS)</div>
+        <div class="text-[10px] text-on-surface-variant">Academic Year 2026-27 (Odd Sem)</div>
+      </div>
+
+      <nav class="space-y-1 text-xs font-semibold">
+        <a href="#overview" class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container text-primary border-l-4 border-primary">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">dashboard</span>
+            <span>Executive Overview</span>
+          </span>
+        </a>
+        <a href="#faculty-approvals" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">person_check</span>
+            <span>Faculty Approvals</span>
+          </span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 count-pending-faculty">2</span>
+        </a>
+        <a href="#event-approvals" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">verified_user</span>
+            <span>Event Approvals</span>
+          </span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-red-100 text-red-700 count-pending-approvals">2</span>
+        </a>
+        <a href="#mom-approvals" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">groups</span>
+            <span>MoM Approvals</span>
+          </span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-purple-100 text-purple-900">1</span>
+        </a>
+        <a href="#radar" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">radar</span>
+            <span>7-Day Historical Radar</span>
+          </span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900 count-historical-reminders">2</span>
+        </a>
+        <a href="#analytics" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">analytics</span>
+            <span>Department Analytics</span>
+          </span>
+        </a>
+        <a href="#calendar" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+            <span>Academic Calendar</span>
+          </span>
+        </a>
+        <a href="#audit" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">history</span>
+            <span>Audit & Activity Logs</span>
+          </span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 sm:p-6 space-y-6 overflow-y-auto">
+      
+      <!-- Welcome Header -->
+      <div id="overview" class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-outline-variant shadow-sm">
+        <div>
+          <nav class="text-xs text-on-surface-variant font-medium mb-1">
+            <span>MET SCMS</span> › <span>Administration</span> › <strong class="text-met-red">HOD Command Center</strong>
+          </nav>
+          <h1 class="font-heading font-extrabold text-2xl text-on-surface tracking-tight">HOD Executive Dashboard</h1>
+          <p class="text-xs text-on-surface-variant mt-0.5">
+            Department administrative oversight, faculty registration gate, final report sign-offs, and historical 7-day lookahead awareness.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="App.showToast('Department configuration updated!', 'info')" class="px-3.5 py-1.5 bg-white border border-outline-variant text-on-surface rounded-lg text-xs font-semibold hover:bg-surface shadow-sm">
+            ⚙️ Dept Config
+          </button>
+          <a href="index.html#architecture-view" class="px-3.5 py-1.5 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-xs font-semibold shadow-sm">
+            SaaS Architecture
+          </a>
+        </div>
+      </div>
+
+      <!-- Top Administrative Metrics (PRD Specified) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 text-xs">
+        
+        <div class="bg-white p-3 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Pending Faculty</span>
+          <div class="font-heading font-extrabold text-2xl text-amber-700 count-pending-faculty">2</div>
+          <span class="text-[9px] text-outline">Action Needed</span>
+        </div>
+
+        <div class="bg-white p-3 rounded-xl border-l-4 border-l-met-red border-y border-r border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Pending Reports</span>
+          <div class="font-heading font-extrabold text-2xl text-met-red count-pending-approvals">2</div>
+          <span class="text-[9px] text-outline">Event Quality Gate</span>
+        </div>
+
+        <div class="bg-white p-3 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Pending MoMs</span>
+          <div class="font-heading font-extrabold text-2xl text-purple-800">1</div>
+          <span class="text-[9px] text-outline">BoS Ratification</span>
+        </div>
+
+        <div class="bg-white p-3 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Total Faculty</span>
+          <div class="font-heading font-extrabold text-2xl text-on-surface count-total-faculty">4</div>
+          <span class="text-[9px] text-outline">In Department</span>
+        </div>
+
+        <div class="bg-white p-3 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Total Events</span>
+          <div class="font-heading font-extrabold text-2xl text-on-surface count-total-events">4</div>
+          <span class="text-[9px] text-outline">AY 2026-27</span>
+        </div>
+
+        <div class="bg-white p-3 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Total Meetings</span>
+          <div class="font-heading font-extrabold text-2xl text-on-surface count-total-meetings">2</div>
+          <span class="text-[9px] text-outline">Committees & BoS</span>
+        </div>
+
+        <div class="bg-white p-3 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Approved Reports</span>
+          <div class="font-heading font-extrabold text-2xl text-tertiary count-approved-reports">1</div>
+          <span class="text-[9px] text-outline">Digitally Signed</span>
+        </div>
+
+        <div class="bg-white p-3 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Rejected Reports</span>
+          <div class="font-heading font-extrabold text-2xl text-red-600 count-rejected-reports">1</div>
+          <span class="text-[9px] text-outline">Returned with Note</span>
+        </div>
+
+      </div>
+
+      <!-- Section 1: Pending Faculty Approvals (PRD Gate) -->
+      <div id="faculty-approvals" class="bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+        <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[20px]">person_check</span>
+            </span>
+            <div>
+              <h3 class="font-heading font-bold text-base text-on-surface">Pending Faculty Registration Approvals</h3>
+              <p class="text-xs text-on-surface-variant">
+                <strong>PRD Rule:</strong> Faculty members must NOT be able to log in until HOD reviews and approves their account.
+              </p>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-bold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded count-pending-faculty">
+            2 Pending Requests
+          </span>
+        </div>
+
+        <div id="pendingFacultyList" class="space-y-2.5 pt-1">
+          <!-- Injected via app.js -->
+        </div>
+      </div>
+
+      <!-- Section 2: Pending Event Reports Quality Gate (PRD P0) -->
+      <div id="event-approvals" class="bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+          <div>
+            <h3 class="font-heading font-bold text-base text-on-surface">Pending Event Reports Submitted for HOD Approval</h3>
+            <p class="text-xs text-on-surface-variant">
+              Review details, quorum, and GPS photographs. Click <strong>Sign & Approve</strong> to affix cryptographic seal or <strong>Inspect Dossier</strong> to reject with mandatory reason.
+            </p>
+          </div>
+          <span class="text-xs font-mono font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded">
+            Quality Gate Active
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-surface border-b border-outline-variant text-on-surface-variant uppercase font-mono font-bold">
+                <th class="px-4 py-2.5">Event Name & Details</th>
+                <th class="px-4 py-2.5">Type</th>
+                <th class="px-4 py-2.5">Submitted By</th>
+                <th class="px-4 py-2.5">Quorum / Attendance</th>
+                <th class="px-4 py-2.5">Status</th>
+                <th class="px-4 py-2.5 text-right">HOD Decision</th>
+              </tr>
+            </thead>
+            <tbody id="pendingApprovalsTableBody">
+              <!-- Injected via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 3: 7-Day Historical Anniversary Radar (PRD FR-REM-01) -->
+      <div id="radar" class="bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+        <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[20px]">radar</span>
+            </span>
+            <div>
+              <h3 class="font-heading font-bold text-base text-on-surface">Historical Event Reminders (Exact 7 Days Before Anniversary)</h3>
+              <p class="text-xs text-on-surface-variant">
+                Automatically scans prior year records and alerts HOD and Faculty exactly 7 days before recurring anniversary.
+              </p>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-bold bg-blue-100 text-primary px-2.5 py-0.5 rounded">
+            Zero Duplicate Engine
+          </span>
+        </div>
+
+        <div id="historicalRemindersContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          <!-- Injected via app.js -->
+        </div>
+      </div>
+
+      <!-- Section 4: Department Analytics & Academic Calendar -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Analytics (6 cols) -->
+        <div id="analytics" class="lg:col-span-6 bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+            <h3 class="font-heading font-bold text-sm text-on-surface">Department Analytics & Metrics</h3>
+            <span class="text-xs font-mono text-outline">NAAC SSR Tier-1</span>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-surface rounded-xl border border-outline-variant">
+              <span class="text-on-surface-variant">Median Approval SLA</span>
+              <div class="font-heading font-extrabold text-xl text-primary mt-1">1.4 Days</div>
+              <span class="text-[10px] text-tertiary font-bold">Target &le; 2.0 Days</span>
+            </div>
+            <div class="p-3 bg-surface rounded-xl border border-outline-variant">
+              <span class="text-on-surface-variant">Documentation Efficiency</span>
+              <div class="font-heading font-extrabold text-xl text-tertiary mt-1">94% Saved</div>
+              <span class="text-[10px] text-on-surface-variant">14 hrs &rarr; 45 mins</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-surface rounded-xl border border-outline-variant space-y-2 text-xs">
+            <span class="font-bold text-on-surface block">Event Distribution by Category</span>
+            <div class="space-y-1.5 text-[11px] font-mono">
+              <div class="flex justify-between"><span>Seminars (38%)</span> <span class="font-bold">18</span></div>
+              <div class="w-full bg-gray-200 h-1.5 rounded"><div class="bg-met-red h-full rounded" style="width: 38%"></div></div>
+              <div class="flex justify-between"><span>Workshops (25%)</span> <span class="font-bold">12</span></div>
+              <div class="w-full bg-gray-200 h-1.5 rounded"><div class="bg-primary h-full rounded" style="width: 25%"></div></div>
+              <div class="flex justify-between"><span>Guest Lectures (21%)</span> <span class="font-bold">10</span></div>
+              <div class="w-full bg-gray-200 h-1.5 rounded"><div class="bg-purple-700 h-full rounded" style="width: 21%"></div></div>
+              <div class="flex justify-between"><span>Industrial Visits (16%)</span> <span class="font-bold">8</span></div>
+              <div class="w-full bg-gray-200 h-1.5 rounded"><div class="bg-emerald-600 h-full rounded" style="width: 16%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic Calendar (6 cols) -->
+        <div id="calendar" class="lg:col-span-6 bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+            <h3 class="font-heading font-bold text-sm text-on-surface">Academic Calendar Activities</h3>
+            <span class="text-xs font-mono text-outline">HOD Controlled</span>
+          </div>
+          <div id="calendarEventsList" class="space-y-2 max-h-80 overflow-y-auto">
+            <!-- Injected via app.js -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Section 5: Recent Approvals & Submissions + Audit Trail -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <div class="bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+            <h3 class="font-heading font-bold text-sm text-on-surface">Recent HOD Approvals</h3>
+            <span class="text-xs font-mono text-tertiary font-bold">Digitally Sealed</span>
+          </div>
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-surface border-b border-outline-variant text-on-surface-variant font-mono">
+                <th class="px-3 py-1.5">Report Title</th>
+                <th class="px-3 py-1.5">Type</th>
+                <th class="px-3 py-1.5">Digital Signature</th>
+              </tr>
+            </thead>
+            <tbody id="hodApprovedReportsTableBody">
+              <!-- Injected via app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="audit" class="bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+            <h3 class="font-heading font-bold text-sm text-on-surface">Immutable System Audit Trail</h3>
+            <span class="text-xs font-mono text-outline">PRD FR-AUD-01</span>
+          </div>
+          <div id="auditLogContainer" class="space-y-2 max-h-72 overflow-y-auto">
+            <!-- Injected via app.js -->
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Review Modal -->
+  <div id="reviewDossierModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-outline-variant shadow-2xl max-w-2xl w-full p-6 space-y-4 animate-fade-in max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between border-b border-outline-variant pb-3">
+        <div>
+          <span class="text-[10px] font-mono font-bold text-met-red uppercase">HOD QUALITY GATE REVIEW</span>
+          <h3 id="modal-report-title" class="font-heading font-extrabold text-lg text-on-surface mt-0.5"></h3>
+          <div class="text-xs text-on-surface-variant font-mono">
+            Ref: <span id="modal-report-ref"></span> • Submitted by <span id="modal-report-author"></span>
+          </div>
+        </div>
+        <button onclick="App.closeReviewModal()" class="text-outline hover:text-on-surface text-xl">✕</button>
+      </div>
+
+      <div id="modal-report-details"></div>
+
+      <div class="pt-4 border-t border-outline-variant flex items-center justify-between gap-3">
+        <button onclick="App.rejectReportPrompt()" class="px-4 py-2 bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 rounded-lg text-xs font-bold transition-all">
+          Reject with Mandatory Reason (PRD FR-APR-03)
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button onclick="App.closeReviewModal()" class="px-3.5 py-2 bg-white border border-outline-variant text-on-surface rounded-lg text-xs font-semibold">
+            Cancel
+          </button>
+          <button onclick="App.approveReport()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-bold shadow-md transition-all active:scale-95 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">verified</span>
+            <span>Sign & Approve with Digital Key</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Footer -->
+  <footer class="bg-white border-t border-outline-variant mt-auto py-6">
+    <div class="max-w-7xl mx-auto px-4 text-xs text-on-surface-variant flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div><strong>MET Bhujbal Knowledge City</strong> • MET Institute of Management</div>
+      <div>Role 1: <strong>HOD (Prof. Nilesh Bread)</strong> • Department Administrator & Final Authority</div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Ensure HOD role is active on this page
+    document.addEventListener('DOMContentLoaded', () => {
+      App.switchUser('usr_hod_01');
+    });
+  </script>
+</body>
+</html>

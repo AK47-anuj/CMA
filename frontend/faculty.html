@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Faculty Operational Dashboard — MET Institute of Management</title>
+  <meta name="description" content="Dedicated operational dashboard for Faculty Members - MET Institute of Management SCMS."/>
+
+  <!-- Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#3525cd",
+            "primary-container": "#4f46e5",
+            "primary-hover": "#4338ca",
+            "met-red": "#d9252a",
+            "met-red-dark": "#b91c1c",
+            "surface": "#f8f9ff",
+            "surface-container": "#e5eeff",
+            "surface-container-low": "#eff4ff",
+            "surface-container-high": "#dce9ff",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#464555",
+            "outline": "#777587",
+            "outline-variant": "#c7c4d8",
+            "tertiary": "#005338"
+          },
+          fontFamily: {
+            "sans": ["Inter", "sans-serif"],
+            "heading": ["Plus Jakarta Sans", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/custom.css"/>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col">
+
+  <!-- Top Faculty Header -->
+  <header class="w-full bg-white border-b border-outline-variant sticky top-0 z-50 shadow-sm">
+    <div class="w-full h-16 flex items-center justify-between px-4 lg:px-8 max-w-7xl mx-auto">
+      
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="h-10 w-10 bg-met-red text-white flex items-center justify-center rounded-lg shadow-sm font-heading font-extrabold text-lg tracking-wider">
+            MET
+          </div>
+          <div class="flex flex-col">
+            <span class="font-heading font-bold text-base text-on-surface leading-tight">Bhujbal Knowledge City</span>
+            <span class="text-[11px] text-on-surface-variant font-medium">MET Institute of Management • Faculty Workspace</span>
+          </div>
+        </a>
+        <span class="hidden sm:inline-block ml-2 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-100 text-primary border border-blue-200">
+          ROLE: FACULTY / TEACHER (OPERATIONAL USER)
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="hod.html" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface text-met-red border border-red-200 rounded-lg text-xs font-semibold hover:bg-red-50 transition-all">
+          <span class="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+          <span>Open HOD Dashboard →</span>
+        </a>
+        
+        <div class="flex items-center gap-2 p-1.5 px-3 rounded-lg bg-surface border border-outline-variant text-xs">
+          <div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center font-bold font-heading text-xs">
+            SP
+          </div>
+          <div class="flex flex-col leading-none text-left">
+            <span class="font-bold text-on-surface">Prof. Shubhangi Phade</span>
+            <span class="text-[9px] text-tertiary font-bold uppercase">Status: ACTIVE</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Shell -->
+  <div class="flex-1 flex max-w-7xl w-full mx-auto">
+    
+    <!-- Left Navigation Rail -->
+    <aside class="w-64 flex-shrink-0 bg-white border-r border-outline-variant p-4 space-y-4 hidden md:block">
+      <div class="p-3 rounded-lg bg-surface border border-outline-variant">
+        <div class="text-[10px] font-mono font-bold text-tertiary">FACULTY ID: FAC-DMS-104</div>
+        <div class="text-xs font-bold text-on-surface mt-0.5">Prof. Shubhangi Phade</div>
+        <div class="text-[10px] text-on-surface-variant">Assistant Professor & Event Lead</div>
+      </div>
+
+      <nav class="space-y-1 text-xs font-semibold">
+        <a href="#overview" class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container text-primary border-l-4 border-primary">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">dashboard</span>
+            <span>Faculty Dashboard</span>
+          </span>
+        </a>
+        <a href="index.html#faculty-studio" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+            <span>+ Create New Event</span>
+          </span>
+          <span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-red-100 text-met-red font-bold">Auto-Gen</span>
+        </a>
+        <a href="#my-reports" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">description</span>
+            <span>My Event Reports</span>
+          </span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-surface-container text-primary">3</span>
+        </a>
+        <a href="index.html#mom-studio" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">groups</span>
+            <span>Create Meeting MoM</span>
+          </span>
+        </a>
+        <a href="#my-moms" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">task</span>
+            <span>My MoMs & Tasks</span>
+          </span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-purple-100 text-purple-900">1</span>
+        </a>
+        <a href="#calendar" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+            <span>Academic Calendar</span>
+          </span>
+        </a>
+        <a href="#reminders" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">radar</span>
+            <span>7-Day Reminders</span>
+          </span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 count-historical-reminders">2</span>
+        </a>
+        <a href="#profile" class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface hover:text-primary transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">badge</span>
+            <span>Faculty Profile</span>
+          </span>
+        </a>
+      </nav>
+
+      <div class="p-3 bg-surface rounded-lg border border-outline-variant text-[11px] space-y-1">
+        <div class="font-bold text-on-surface">Approval Hierarchy</div>
+        <div class="text-[10px] text-on-surface-variant">Reviewer: Prof. Nilesh Bread (HOD)</div>
+        <div class="text-[10px] text-tertiary font-bold">Turnaround SLA &le; 2.0 Days</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 sm:p-6 space-y-6 overflow-y-auto">
+      
+      <!-- Welcome Header -->
+      <div id="overview" class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-outline-variant shadow-sm">
+        <div>
+          <nav class="text-xs text-on-surface-variant font-medium mb-1">
+            <span>MET SCMS</span> › <span>Faculty Workspace</span> › <strong class="text-primary">Operational Hub</strong>
+          </nav>
+          <h1 class="font-heading font-extrabold text-2xl text-on-surface tracking-tight">Faculty Management Dashboard</h1>
+          <p class="text-xs text-on-surface-variant mt-0.5">
+            Create academic events, auto-generate official reports, track HOD approvals, and resubmit corrected dossiers.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <a href="index.html#mom-studio" class="px-3.5 py-2 bg-surface text-on-surface border border-outline-variant rounded-lg text-xs font-semibold hover:bg-surface-container shadow-sm">
+            + Create Meeting MoM
+          </a>
+          <a href="index.html#faculty-studio" class="px-4 py-2 bg-met-red hover:bg-met-red-dark text-white rounded-lg text-xs font-bold shadow-md transition-all active:scale-95 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+            <span>+ Create New Event Record</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Top Operational Metrics (PRD Specified) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+        
+        <div class="bg-white p-3.5 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">My Events</span>
+          <div class="font-heading font-extrabold text-2xl text-on-surface mt-1">3</div>
+          <span class="text-[10px] text-outline">Conducted</span>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">My Reports</span>
+          <div class="font-heading font-extrabold text-2xl text-on-surface mt-1">3</div>
+          <span class="text-[10px] text-outline">Compiled</span>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border-l-4 border-l-amber-500 border-y border-r border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Pending Approvals</span>
+          <div class="font-heading font-extrabold text-2xl text-amber-700 mt-1">1</div>
+          <span class="text-[10px] text-amber-800 font-semibold">With HOD</span>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border-l-4 border-l-emerald-600 border-y border-r border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Approved Reports</span>
+          <div class="font-heading font-extrabold text-2xl text-tertiary mt-1">1</div>
+          <span class="text-[10px] text-emerald-800 font-semibold">Signed & Final</span>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border-l-4 border-l-red-600 border-y border-r border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">Rejected Reports</span>
+          <div class="font-heading font-extrabold text-2xl text-red-600 mt-1">1</div>
+          <span class="text-[10px] text-red-700 font-bold">Action Required</span>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-xl border border-outline-variant shadow-sm">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant">My MoMs</span>
+          <div class="font-heading font-extrabold text-2xl text-purple-800 mt-1">1</div>
+          <span class="text-[10px] text-outline">Documented</span>
+        </div>
+
+      </div>
+
+      <!-- Action Required Banner: Resubmission Flow (Crucial PRD Workflow 1!) -->
+      <div class="p-4 rounded-xl bg-red-50 border-2 border-red-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+        <div class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-red-600 text-[24px]">error</span>
+          <div>
+            <div class="font-bold text-xs text-red-900">Action Required: 1 Event Report Returned by HOD for Correction</div>
+            <p class="text-[11px] text-red-800 mt-0.5">
+              Report <strong>#RPT-2026-IV-045</strong> (Industrial Visit to NSE & SEBI). 
+              HOD Reason: <em>"GPS timestamp metadata was missing on 2 site photographs. Please re-upload verified geotagged photos and resubmit."</em>
+            </p>
+          </div>
+        </div>
+        <button onclick="App.openResubmitStudio('RPT-2026-IV-045')" class="px-4 py-2 bg-met-red hover:bg-met-red-dark text-white rounded-lg text-xs font-bold shadow-md transition-all active:scale-95 whitespace-nowrap">
+          Correct & Resubmit Now →
+        </button>
+      </div>
+
+      <!-- Section: My Event Reports & Status Table -->
+      <div id="my-reports" class="bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+          <div>
+            <h3 class="font-heading font-bold text-base text-on-surface">My Event Reports & Approval Tracking</h3>
+            <p class="text-xs text-on-surface-variant">
+              Full lifecycle tracking: Draft &rarr; Submitted &rarr; HOD Review &rarr; Approved / Rejected with reason &rarr; Resubmit.
+            </p>
+          </div>
+          <a href="index.html#faculty-studio" class="text-xs font-semibold text-primary hover:underline">
+            + Open Studio
+          </a>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-surface border-b border-outline-variant text-on-surface-variant uppercase font-mono font-bold">
+                <th class="px-4 py-2.5">Event Name & Details</th>
+                <th class="px-4 py-2.5">Type</th>
+                <th class="px-4 py-2.5">Quorum / Attendance</th>
+                <th class="px-4 py-2.5">Approval Status</th>
+                <th class="px-4 py-2.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="facultyReportsTableBody">
+              <!-- Injected via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section: 7-Day Historical Reminders (Faculty View) -->
+      <div id="reminders" class="bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+        <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[20px]">radar</span>
+            </span>
+            <div>
+              <h3 class="font-heading font-bold text-base text-on-surface">Historical Event Reminders (7-Day Lookahead)</h3>
+              <p class="text-xs text-on-surface-variant">
+                Notification fires 7 calendar days before previous year's event anniversary. Use 1-Click Clone to auto-draft the event for AY 2026-27.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div id="facultyRemindersContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          <!-- Injected via app.js -->
+        </div>
+      </div>
+
+      <!-- Section: My MoMs & Assigned Tasks -->
+      <div id="my-moms" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- My MoMs (7 cols) -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+            <h3 class="font-heading font-bold text-sm text-on-surface">Minutes of Meeting (MoM) Authored</h3>
+            <a href="index.html#mom-studio" class="text-xs text-primary font-semibold hover:underline">+ New MoM</a>
+          </div>
+
+          <div class="p-3 bg-surface rounded-xl border border-outline-variant space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-on-surface">Department Faculty Planning & Accreditation Review</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-tertiary border border-emerald-200">APPROVED BY HOD</span>
+            </div>
+            <p class="text-on-surface-variant text-[11px]">
+              Held: 2026-09-12 • All 28 Faculty Members Present • Quorum Verified
+            </p>
+            <div class="pt-2 border-t border-outline-variant/60 flex items-center justify-between">
+              <span class="font-mono text-[10px] text-outline">REF: MET/IOM/MOM/2026/FAC-01</span>
+              <button onclick="DocumentExporter.exportToWord('printable-mom-dossier', 'MET_MoM_Fac01.doc')" class="text-primary font-semibold hover:underline text-[11px]">
+                Export MoM (.doc)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assigned Tasks (5 cols) -->
+        <div class="lg:col-span-5 bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+            <h3 class="font-heading font-bold text-sm text-on-surface">Assigned MoM Action Items</h3>
+            <span class="text-xs font-mono text-outline">Deadlines</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 bg-surface rounded-lg border border-outline-variant flex items-start gap-2">
+              <span class="material-symbols-outlined text-primary text-[18px]">assignment</span>
+              <div>
+                <div class="font-bold text-on-surface">Confirm student bus logistics for NSE visit</div>
+                <div class="text-[10px] text-red-600 font-semibold font-mono">Deadline: Oct 7, 2026 (Pending)</div>
+              </div>
+            </div>
+
+            <div class="p-2.5 bg-surface rounded-lg border border-outline-variant flex items-start gap-2">
+              <span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+              <div>
+                <div class="font-bold text-on-surface">Upload 2025 event records for 7-day radar</div>
+                <div class="text-[10px] text-tertiary font-semibold font-mono">Completed on Sept 20</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Section: Academic Calendar & Faculty Profile -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Calendar (7 cols) -->
+        <div id="calendar" class="lg:col-span-7 bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+            <h3 class="font-heading font-bold text-sm text-on-surface">Academic Calendar Schedule</h3>
+            <span class="text-xs font-mono text-outline">AY 2026-27</span>
+          </div>
+          <div id="calendarEventsList" class="space-y-2 max-h-72 overflow-y-auto">
+            <!-- Injected via app.js -->
+          </div>
+        </div>
+
+        <!-- Faculty Profile Card (5 cols) -->
+        <div id="profile" class="lg:col-span-5 bg-white rounded-2xl border border-outline-variant p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-2">
+            <h3 class="font-heading font-bold text-sm text-on-surface">Faculty Member Profile</h3>
+            <span class="text-xs font-mono text-tertiary font-bold">HOD VERIFIED</span>
+          </div>
+
+          <div class="flex items-center gap-3 pt-1">
+            <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-base">
+              SP
+            </div>
+            <div>
+              <div class="font-heading font-bold text-sm text-on-surface">Prof. Shubhangi Phade</div>
+              <div class="text-xs text-on-surface-variant">Assistant Professor & Event Lead</div>
+              <div class="text-[11px] font-mono text-primary">shubhangi@met.edu</div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-surface rounded-xl border border-outline-variant text-xs space-y-1 font-mono">
+            <div><strong>Department:</strong> Management Studies</div>
+            <div><strong>Institute:</strong> MET Institute of Management</div>
+            <div><strong>Assigned Batches:</strong> MBA Finance 2025-27</div>
+            <div><strong>Accreditation Role:</strong> NAAC SSR Criterion 1 Lead</div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Shared Footer -->
+  <footer class="bg-white border-t border-outline-variant mt-auto py-6">
+    <div class="max-w-7xl mx-auto px-4 text-xs text-on-surface-variant flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div><strong>MET Bhujbal Knowledge City</strong> • MET Institute of Management</div>
+      <div>Role 2: <strong>Faculty / Teacher (Prof. Shubhangi Phade)</strong> • Operational User</div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Ensure Faculty role is active on this page
+    document.addEventListener('DOMContentLoaded', () => {
+      App.switchUser('usr_fac_01');
+    });
+  </script>
+</body>
+</html>
