@@ -1,23 +1,13 @@
 // MET SCMS - Frontend API Client
-// Handles communication with Backend REST API with automatic offline fallback to SCMS_DATA
-//
-// API URL Resolution (production-safe):
-//  1. If window.SCMS_API_BASE_URL is set (e.g., via a config script), use that.
-//  2. If served from the backend (same origin), use relative /api paths.
-//  3. If opened as a local file (file://), fall back to standalone mode.
+// Handles communication with Backend REST API.
+// All requests include credentials (httpOnly JWT cookie).
+// On 401, redirects to login.
 
 const ApiClient = {
   // Production-safe API base URL resolution
   baseUrl: (() => {
-    // 1. Explicit override via global config (set in index.html or a config.js)
-    if (window.SCMS_API_BASE_URL) {
-      return window.SCMS_API_BASE_URL;
-    }
-    // 2. Local file:// protocol — no backend available
-    if (window.location.protocol === 'file:') {
-      return null; // Will run in standalone/seed mode
-    }
-    // 3. Same-origin (served by the backend): use relative path
+    if (window.SCMS_API_BASE_URL) return window.SCMS_API_BASE_URL;
+    if (window.location.protocol === 'file:') return null;
     return window.location.origin + '/api';
   })(),
 
@@ -45,7 +35,6 @@ const ApiClient = {
         return true;
       }
     } catch (e) {
-      // Backend not running or unreachable
       this.isOnline = false;
     }
     this.checkAttempted = true;
@@ -56,7 +45,6 @@ const ApiClient = {
   updateConnectionStatusBadge(isOnline) {
     let badge = document.getElementById('scms-api-status-badge');
     if (!badge) {
-      // Create subtle floating/header status indicator
       badge = document.createElement('div');
       badge.id = 'scms-api-status-badge';
       badge.className = 'fixed bottom-3 right-3 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono shadow-md border transition-all duration-300 pointer-events-auto cursor-pointer select-none';
@@ -84,6 +72,10 @@ const ApiClient = {
     }
   },
 
+  /**
+   * Core request method. Includes credentials for JWT cookie.
+   * On 401, triggers re-login flow.
+   */
   async request(endpoint, options = {}) {
     if (!this.checkAttempted) {
       await this.checkHealth();
@@ -96,6 +88,7 @@ const ApiClient = {
     try {
       const url = `${this.baseUrl}${endpoint}`;
       const config = {
+        credentials: 'include', // Send httpOnly cookies
         headers: {
           'Content-Type': 'application/json',
           ...(options.headers || {})
@@ -104,17 +97,47 @@ const ApiClient = {
       };
 
       const res = await fetch(url, config);
+
+      // Handle 401 — session expired or not authenticated
+      if (res.status === 401) {
+        const data = await res.json().catch(() => ({}));
+        console.warn('[SCMS API] 401 Unauthorized:', data.message);
+        
+        // Notify the auth module
+        if (typeof Auth !== 'undefined') {
+          Auth.isAuthenticated = false;
+          Auth.currentUser = null;
+        }
+        
+        // Show toast and open login
+        if (typeof App !== 'undefined') {
+          App.showToast('Session expired. Please log in again.', 'warning');
+          App.openAuthModal('login');
+        }
+        
+        return { success: false, data, offline: false, unauthorized: true };
+      }
+
+      // Handle 403
+      if (res.status === 403) {
+        const data = await res.json().catch(() => ({}));
+        if (typeof App !== 'undefined') {
+          App.showToast(data.message || 'Access denied.', 'danger');
+        }
+        return { success: false, data, offline: false, forbidden: true };
+      }
+
       const data = await res.json();
       return { success: res.ok, data, offline: false };
     } catch (err) {
-      console.warn(`[SCMS API] Fetch to ${endpoint} failed, falling back to local dataset:`, err.message);
+      console.warn(`[SCMS API] Fetch to ${endpoint} failed:`, err.message);
       this.isOnline = false;
       this.updateConnectionStatusBadge(false);
       return { offline: true, error: err.message };
     }
   },
 
-  // Sync entire dataset on startup
+  // ---- Sync ----
   async getSyncData() {
     const res = await this.request('/system/data');
     if (!res.offline && res.success && res.data && res.data.data) {
@@ -123,29 +146,40 @@ const ApiClient = {
     return null;
   },
 
-  // Auth & Users
-  async login(email, id) {
-    return this.request('/users/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, id })
-    });
+  // ---- Users ----
+  async getUsers(filters = {}) {
+    const params = new URLSearchParams(filters).toString();
+    return this.request(`/users${params ? '?' + params : ''}`);
   },
 
-  async registerFaculty(userData) {
-    return this.request('/users/register', {
-      method: 'POST',
-      body: JSON.stringify(userData)
-    });
-  },
-
-  async updateFacultyStatus(facultyId, status, actorName) {
+  async updateFacultyStatus(facultyId, status) {
     return this.request(`/users/${facultyId}/status`, {
       method: 'PATCH',
-      body: JSON.stringify({ status, actorName })
+      body: JSON.stringify({ status })
     });
   },
 
-  // Reports
+  // ---- Events ----
+  async getEvents(filters = {}) {
+    const params = new URLSearchParams(filters).toString();
+    return this.request(`/events${params ? '?' + params : ''}`);
+  },
+
+  async createEvent(eventData) {
+    return this.request('/events', {
+      method: 'POST',
+      body: JSON.stringify(eventData)
+    });
+  },
+
+  async updateEvent(eventId, eventData) {
+    return this.request(`/events/${eventId}`, {
+      method: 'PUT',
+      body: JSON.stringify(eventData)
+    });
+  },
+
+  // ---- Reports ----
   async submitReport(reportData) {
     return this.request('/reports', {
       method: 'POST',
@@ -160,14 +194,14 @@ const ApiClient = {
     });
   },
 
-  async updateReportStatus(reportId, status, rejectionReason = '', approvedBy = '') {
+  async updateReportStatus(reportId, status, rejectionReason = '') {
     return this.request(`/reports/${reportId}/status`, {
       method: 'PATCH',
-      body: JSON.stringify({ status, rejectionReason, approvedBy })
+      body: JSON.stringify({ status, rejectionReason })
     });
   },
 
-  // Meetings
+  // ---- Meetings ----
   async submitMeeting(meetingData) {
     return this.request('/meetings', {
       method: 'POST',
@@ -175,14 +209,14 @@ const ApiClient = {
     });
   },
 
-  async updateMeetingStatus(meetingId, status, approvedBy = '') {
+  async updateMeetingStatus(meetingId, status, rejectionReason = '') {
     return this.request(`/meetings/${meetingId}/status`, {
       method: 'PATCH',
-      body: JSON.stringify({ status, approvedBy })
+      body: JSON.stringify({ status, rejectionReason })
     });
   },
 
-  // Calendar
+  // ---- Calendar ----
   async addCalendarEvent(eventData) {
     return this.request('/calendar', {
       method: 'POST',
@@ -190,7 +224,33 @@ const ApiClient = {
     });
   },
 
-  // Audit Logs
+  // ---- Reminders ----
+  async getReminders() {
+    return this.request('/reminders');
+  },
+
+  async markReminderRead(reminderId) {
+    return this.request(`/reminders/${reminderId}/read`, { method: 'PATCH' });
+  },
+
+  async dismissReminder(reminderId) {
+    return this.request(`/reminders/${reminderId}/dismiss`, { method: 'PATCH' });
+  },
+
+  // ---- Notifications ----
+  async getNotifications() {
+    return this.request('/notifications');
+  },
+
+  async markNotificationRead(notifId) {
+    return this.request(`/notifications/${notifId}/read`, { method: 'PATCH' });
+  },
+
+  async markAllNotificationsRead() {
+    return this.request('/notifications/read-all', { method: 'POST' });
+  },
+
+  // ---- Audit Logs ----
   async recordAuditLog(actor, action, details) {
     return this.request('/audit-logs', {
       method: 'POST',
@@ -198,7 +258,23 @@ const ApiClient = {
     });
   },
 
-  // Reset Store
+  // ---- Demo ----
+  async getDemoInfo() {
+    return this.request('/demo/info');
+  },
+
+  async setDemoClock(date) {
+    return this.request('/demo/clock', {
+      method: 'POST',
+      body: JSON.stringify({ date })
+    });
+  },
+
+  async resetDemo() {
+    return this.request('/demo/reset', { method: 'POST' });
+  },
+
+  // ---- System ----
   async resetStore() {
     return this.request('/system/reset', { method: 'POST' });
   }

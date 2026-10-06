@@ -10,15 +10,32 @@ const App = {
   activePreviewReport: null,
   resubmittingReportId: null,
 
-  init() {
-    // Default logged in user: HOD (Prof. Nilesh Bread)
-    this.currentUser = this.data.users.find(u => u.role === 'HOD');
-    this.currentRole = this.currentUser ? this.currentUser.role : 'HOD';
-
+  async init() {
+    // Render the public-facing view and bind UI events first
     this.renderAllViews();
     this.bindEvents();
     this.updateLiveDossierPreview();
     this.updateLiveMoMPreview();
+
+    // Try backend-authenticated flow first
+    if (typeof Auth !== 'undefined' && typeof ApiClient !== 'undefined') {
+      const online = await ApiClient.checkHealth();
+      if (online) {
+        // Attempt to restore an existing session
+        const authenticated = await Auth.init();
+        if (authenticated) {
+          // Auth.onLoginSuccess will handle navigation
+          return;
+        }
+        // No session — stay on public view, user can open login modal
+        this.switchView('public');
+        return;
+      }
+    }
+
+    // Standalone / offline fallback — use local mock user
+    this.currentUser = this.data.users.find(u => u.role === 'HOD');
+    this.currentRole = this.currentUser ? this.currentUser.role : 'HOD';
 
     // Check URL hash
     const hash = window.location.hash.replace('#', '');
@@ -27,15 +44,6 @@ const App = {
       this.switchView(hash);
     } else {
       this.switchView('public');
-    }
-
-    // Connect to backend REST API if online
-    if (typeof ApiClient !== 'undefined') {
-      ApiClient.checkHealth().then(isOnline => {
-        if (isOnline) {
-          this.syncWithBackend();
-        }
-      });
     }
   },
 
@@ -183,52 +191,75 @@ const App = {
   switchAuthTab(tab) {
     const loginSec = document.getElementById('auth-login-section');
     const registerSec = document.getElementById('auth-register-section');
+    const forgotSec = document.getElementById('auth-forgot-section');
     const tabLogin = document.getElementById('tab-auth-login');
     const tabRegister = document.getElementById('tab-auth-register');
 
+    // Hide all sections first
+    loginSec?.classList.add('hidden');
+    registerSec?.classList.add('hidden');
+    forgotSec?.classList.add('hidden');
+
+    // Reset tab styles
+    [tabLogin, tabRegister].forEach(btn => {
+      btn?.classList.remove('border-primary', 'text-primary', 'font-bold');
+      btn?.classList.add('text-on-surface-variant', 'border-transparent');
+    });
+
     if (tab === 'login') {
       loginSec?.classList.remove('hidden');
-      registerSec?.classList.add('hidden');
       tabLogin?.classList.add('border-primary', 'text-primary', 'font-bold');
       tabLogin?.classList.remove('text-on-surface-variant', 'border-transparent');
-      tabRegister?.classList.remove('border-primary', 'text-primary', 'font-bold');
-      tabRegister?.classList.add('text-on-surface-variant', 'border-transparent');
-    } else {
-      loginSec?.classList.add('hidden');
+    } else if (tab === 'register') {
       registerSec?.classList.remove('hidden');
       tabRegister?.classList.add('border-primary', 'text-primary', 'font-bold');
       tabRegister?.classList.remove('text-on-surface-variant', 'border-transparent');
-      tabLogin?.classList.remove('border-primary', 'text-primary', 'font-bold');
-      tabLogin?.classList.add('text-on-surface-variant', 'border-transparent');
+    } else if (tab === 'forgot') {
+      forgotSec?.classList.remove('hidden');
+      // Keep login tab visually active since forgot is a sub-flow of login
+      tabLogin?.classList.add('border-primary', 'text-primary', 'font-bold');
+      tabLogin?.classList.remove('text-on-surface-variant', 'border-transparent');
     }
   },
 
-  handleFacultyRegistration(e) {
+  async handleFacultyRegistration(e) {
     e.preventDefault();
     const name = document.getElementById('reg-name').value.trim();
     const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password')?.value;
     const designation = document.getElementById('reg-designation').value.trim();
-    const department = document.getElementById('reg-department').value;
 
-    if (!name || !email) {
-      alert("Please fill in all required fields.");
+    if (!name || !email || !password) {
+      this.showToast('Please fill in all required fields (Name, Email, Password).', 'warning');
       return;
     }
 
-    // Check duplicate
+    if (password.length < 8) {
+      this.showToast('Password must be at least 8 characters long.', 'warning');
+      return;
+    }
+
+    // Use real backend Auth if available
+    if (typeof Auth !== 'undefined' && ApiClient.isOnline) {
+      await Auth.register(name, email, password, designation);
+      // Auth.showRegisterSuccess handles the UI feedback
+      return;
+    }
+
+    // Offline fallback — local-only registration
     if (this.data.users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-      alert(`Account with email ${email} already exists!`);
+      this.showToast(`Account with email ${email} already exists!`, 'danger');
       return;
     }
 
     const newFaculty = {
       id: `usr_fac_${Date.now()}`,
       name: name,
-      role: "FACULTY", // ALWAYS FACULTY!
+      role: 'FACULTY',
       email: email,
-      designation: designation || "Assistant Professor",
-      department: department || "Management Studies",
-      status: "PENDING_HOD_APPROVAL", // Exact requirement
+      designation: designation || 'Assistant Professor',
+      department: 'Management Studies',
+      status: 'PENDING_HOD_APPROVAL',
       registeredAt: new Date().toLocaleString(),
       avatar: name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
     };
@@ -236,33 +267,41 @@ const App = {
     this.data.users.push(newFaculty);
     this.data.auditLog.unshift({
       timestamp: new Date().toLocaleString(),
-      actor: "System",
-      action: "FACULTY_REGISTRATION",
+      actor: 'System',
+      action: 'FACULTY_REGISTRATION',
       details: `${name} registered. Status: PENDING_HOD_APPROVAL`
     });
-
-    if (typeof ApiClient !== 'undefined') {
-      ApiClient.registerFaculty(newFaculty);
-    }
 
     this.renderPendingFacultyApprovals();
     this.updateKPIBadges();
     this.closeAuthModal();
-
-    alert(`[REGISTRATION SUBMITTED]\n\nThank you, ${name}!\nYour account status is: PENDING_HOD_APPROVAL.\n\nPer security rules, a faculty member CANNOT log in until the HOD reviews and approves your account.`);
-    this.showToast(`Faculty registration submitted: Pending HOD Approval!`, "warning");
+    this.showToast('Faculty registration submitted: Pending HOD Approval!', 'warning');
   },
 
-  handleLogin(e) {
+  async handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value.trim();
-    const user = this.data.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    const password = document.getElementById('login-password')?.value;
+    const remember = document.getElementById('login-remember')?.checked || false;
 
-    if (!user) {
-      alert("Account not found. Please register first or use one of the quick test accounts.");
+    if (!email || !password) {
+      this.showToast('Please enter both email and password.', 'warning');
       return;
     }
 
+    // Use real backend Auth if available
+    if (typeof Auth !== 'undefined' && ApiClient.isOnline) {
+      await Auth.login(email, password, remember);
+      // Auth.onLoginSuccess handles navigation on success
+      return;
+    }
+
+    // Offline fallback — local-only login
+    const user = this.data.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    if (!user) {
+      this.showToast('Account not found. Please register first.', 'danger');
+      return;
+    }
     this.closeAuthModal();
     this.switchUser(user.id);
   },
@@ -1132,6 +1171,28 @@ const App = {
 
     document.getElementById('userLoginForm')?.addEventListener('submit', (e) => {
       this.handleLogin(e);
+    });
+
+    // Forgot password form
+    document.getElementById('forgotPasswordForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email')?.value?.trim();
+      if (email && typeof Auth !== 'undefined') {
+        Auth.forgotPassword(email);
+      }
+    });
+
+    // Logout button
+    document.getElementById('logout-btn')?.addEventListener('click', () => {
+      if (typeof Auth !== 'undefined' && Auth.isAuthenticated) {
+        Auth.logout();
+      } else {
+        // Standalone/offline: reset to public view
+        this.currentUser = null;
+        this.currentRole = null;
+        this.switchView('public');
+        this.showToast('Logged out.', 'info');
+      }
     });
   },
 

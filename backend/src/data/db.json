@@ -18,7 +18,11 @@
       "designation": "Head of Department & Professor",
       "status": "ACTIVE",
       "avatar": "NB",
-      "department": "Management Studies"
+      "department": "Management Studies",
+      "authProvider": "local",
+      "failedLogins": 0,
+      "lockedUntil": null,
+      "lastLoginAt": null
     },
     {
       "id": "usr_fac_01",
@@ -28,7 +32,11 @@
       "designation": "Assistant Professor & Event Lead",
       "status": "ACTIVE",
       "avatar": "SP",
-      "department": "Management Studies"
+      "department": "Management Studies",
+      "authProvider": "local",
+      "failedLogins": 0,
+      "lockedUntil": null,
+      "lastLoginAt": null
     },
     {
       "id": "usr_fac_02",
@@ -38,7 +46,11 @@
       "designation": "Academic Co-ordinator & Assistant Professor",
       "status": "ACTIVE",
       "avatar": "AK",
-      "department": "Management Studies"
+      "department": "Management Studies",
+      "authProvider": "local",
+      "failedLogins": 0,
+      "lockedUntil": null,
+      "lastLoginAt": null
     },
     {
       "id": "usr_fac_03",
@@ -49,7 +61,11 @@
       "status": "REJECTED",
       "registeredAt": "2026-09-28 09:15 AM",
       "avatar": "RS",
-      "department": "Management Studies"
+      "department": "Management Studies",
+      "authProvider": "local",
+      "failedLogins": 0,
+      "lockedUntil": null,
+      "lastLoginAt": null
     },
     {
       "id": "usr_fac_04",
@@ -60,7 +76,11 @@
       "status": "PENDING_HOD_APPROVAL",
       "registeredAt": "2026-09-28 11:30 AM",
       "avatar": "MN",
-      "department": "Management Studies"
+      "department": "Management Studies",
+      "authProvider": "local",
+      "failedLogins": 0,
+      "lockedUntil": null,
+      "lastLoginAt": null
     }
   ],
   "historicalReminders": [
@@ -119,7 +139,10 @@
       "objectives": "To provide real-world insights into automated warehouse robotics, real-time telemetry, and cold-chain resilience.",
       "activities": "Keynote presentation followed by live telemetry simulation and student Q&A on ERP procurement.",
       "outcomes": "Students understood ERP-integrated warehouse management systems and modern procurement KPIs.",
-      "curriculumMapping": "NAAC Criterion 1.3.2 • Course Outcome: MBA-SCM-401"
+      "curriculumMapping": "NAAC Criterion 1.3.2 • Course Outcome: MBA-SCM-401",
+      "version": 1,
+      "history": [],
+      "createdAt": "2026-09-26"
     },
     {
       "id": "RPT-2026-WS-088",
@@ -140,7 +163,10 @@
       "objectives": "Hands-on execution of Python backtesting for moving-average crossover strategies.",
       "activities": "Algorithmic backtesting labs using Jupyter notebooks with real-time tick data.",
       "outcomes": "Participants deployed real-time paper trading algorithms with risk-reward ratios calculated.",
-      "curriculumMapping": "NAAC Criterion 1.3.3 • Course Outcome: MBA-FIN-304"
+      "curriculumMapping": "NAAC Criterion 1.3.3 • Course Outcome: MBA-FIN-304",
+      "version": 1,
+      "history": [],
+      "createdAt": "2026-09-24"
     },
     {
       "id": "RPT-2026-IV-045",
@@ -162,7 +188,10 @@
       "objectives": "Exposure to clearing corporation architectures, settlement cycles (T+1), and investor grievance cells.",
       "activities": "Live trading floor observation and interaction with regulatory surveillance team.",
       "outcomes": "Comprehensive field visit report prepared by students with compliance case study.",
-      "curriculumMapping": "NAAC Criterion 1.3.4 • Course Outcome: MBA-FIN-202"
+      "curriculumMapping": "NAAC Criterion 1.3.4 • Course Outcome: MBA-FIN-202",
+      "version": 1,
+      "history": [],
+      "createdAt": "2026-09-22"
     },
     {
       "id": "RPT-2026-SEM-082",
@@ -185,7 +214,10 @@
       "documentRef": "MET/IOM/DMS/2026/SEM-082",
       "objectives": "Examine evolving SEBI BRSR Core frameworks and ESG risk assessment models.",
       "activities": "Panel discussion with corporate sustainability directors and institutional ESG underwriters.",
-      "outcomes": "Students compiled 5 institutional ESG due-diligence framework case studies."
+      "outcomes": "Students compiled 5 institutional ESG due-diligence framework case studies.",
+      "version": 1,
+      "history": [],
+      "createdAt": "2026-09-16"
     }
   ],
   "meetings": [
@@ -214,7 +246,11 @@
         }
       ],
       "status": "PENDING_HOD_APPROVAL",
-      "submittedBy": "Prof. Akshay Kale"
+      "submittedBy": "Prof. Akshay Kale",
+      "scheduleStatus": "SCHEDULED",
+      "agendaItems": [],
+      "invitees": [],
+      "momStatus": "NOT_STARTED"
     },
     {
       "id": "MOM-2026-FAC-01",
@@ -238,7 +274,11 @@
       "status": "APPROVED",
       "approvedBy": "Prof. Nilesh Bread (HOD)",
       "approvalDate": "2026-09-13",
-      "submittedBy": "Prof. Shubhangi Phade"
+      "submittedBy": "Prof. Shubhangi Phade",
+      "scheduleStatus": "HELD",
+      "agendaItems": [],
+      "invitees": [],
+      "momStatus": "APPROVED"
     }
   ],
   "calendarEvents": [
@@ -249,7 +289,10 @@
       "title": "BoS Curriculum Alignment & Credit Audit Meeting",
       "type": "Meeting",
       "venue": "Boardroom A",
-      "tag": "Academic Governance"
+      "tag": "Academic Governance",
+      "source": "MANUAL",
+      "refId": null,
+      "archived": false
     },
     {
       "id": "cal-02",
@@ -258,7 +301,10 @@
       "title": "Mahatma Gandhi Jayanti",
       "type": "Holiday",
       "venue": "Campus Closed",
-      "tag": "Statutory Holiday"
+      "tag": "Statutory Holiday",
+      "source": "MANUAL",
+      "refId": null,
+      "archived": false
     },
     {
       "id": "cal-03",
@@ -267,7 +313,10 @@
       "title": "Annual State-Level Hackathon 2026 (Anniversary Re-run)",
       "type": "Competition",
       "venue": "Auditorium & Innovation Hub",
-      "tag": "Flagship Event"
+      "tag": "Flagship Event",
+      "source": "MANUAL",
+      "refId": null,
+      "archived": false
     },
     {
       "id": "cal-04",
@@ -276,7 +325,10 @@
       "title": "National FDP on AI in Finance & Algorithmic Banking",
       "type": "Workshop",
       "venue": "Executive Seminar Hall",
-      "tag": "Faculty Development"
+      "tag": "Faculty Development",
+      "source": "MANUAL",
+      "refId": null,
+      "archived": false
     },
     {
       "id": "cal-05",
@@ -285,7 +337,10 @@
       "title": "National Conclave on Generative AI & FinTech Disruption",
       "type": "Guest Lecture",
       "venue": "Convention Center, MET",
-      "tag": "Guest Conclave"
+      "tag": "Guest Conclave",
+      "source": "MANUAL",
+      "refId": null,
+      "archived": false
     },
     {
       "id": "cal-06",
@@ -294,7 +349,10 @@
       "title": "MBA Mid-Term Review & Continuous Evaluation Defense",
       "type": "Academic",
       "venue": "Classrooms 401-408",
-      "tag": "Examinations"
+      "tag": "Examinations",
+      "source": "MANUAL",
+      "refId": null,
+      "archived": false
     }
   ],
   "auditLog": [
@@ -346,5 +404,10 @@
       "action": "EVENT_REPORT_APPROVED",
       "details": "Approved National Seminar RPT-2026-SEM-082 with digital signature"
     }
-  ]
+  ],
+  "events": [],
+  "reminders": [],
+  "notifications": [],
+  "resetTokens": [],
+  "_schemaVersion": 2
 }

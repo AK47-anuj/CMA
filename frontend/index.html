@@ -1525,7 +1525,7 @@
 
   <!-- Authentication Modal (Login & Faculty Registration) -->
   <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl border border-outline-variant shadow-2xl max-w-md w-full p-6 space-y-4 animate-fade-in">
+    <div class="bg-white rounded-2xl border border-outline-variant shadow-2xl max-w-md w-full p-6 space-y-4 animate-fade-in max-h-[90vh] overflow-y-auto">
       
       <div class="flex items-center justify-between border-b border-outline-variant pb-2">
         <div class="flex items-center gap-2">
@@ -1549,46 +1549,91 @@
       <div id="auth-login-section" class="space-y-4 text-xs">
         <form id="userLoginForm" class="space-y-3">
           <div>
-            <label class="block font-bold text-on-surface mb-1">Email / Institutional ID</label>
-            <input id="login-email" type="email" required placeholder="hod@met.edu or faculty@met.edu" class="w-full h-9 px-3 bg-surface border border-outline-variant rounded-lg text-on-surface"/>
+            <label for="login-email" class="block font-bold text-on-surface mb-1">Email / Institutional ID</label>
+            <input id="login-email" type="email" required placeholder="hod@met.edu or shubhangi@met.edu" class="w-full h-9 px-3 bg-surface border border-outline-variant rounded-lg text-on-surface focus:ring-2 focus:ring-primary focus:border-primary"/>
           </div>
           <div>
-            <label class="block font-bold text-on-surface mb-1">Password</label>
-            <input type="password" required value="••••••••" class="w-full h-9 px-3 bg-surface border border-outline-variant rounded-lg text-on-surface"/>
+            <label for="login-password" class="block font-bold text-on-surface mb-1">Password</label>
+            <div class="relative">
+              <input id="login-password" type="password" required placeholder="Enter your password" class="w-full h-9 px-3 pr-10 bg-surface border border-outline-variant rounded-lg text-on-surface focus:ring-2 focus:ring-primary focus:border-primary"/>
+              <button type="button" onclick="Auth.togglePasswordVisibility('login-password', this)" class="absolute right-2 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              </button>
+            </div>
           </div>
-          <button type="submit" class="w-full py-2 bg-met-red hover:bg-met-red-dark text-white rounded-lg font-bold shadow-md transition-all">
+          <div class="flex items-center justify-between">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input id="login-remember" type="checkbox" class="w-3.5 h-3.5 rounded border-outline-variant text-primary focus:ring-primary"/>
+              <span class="text-on-surface-variant">Remember me</span>
+            </label>
+            <button type="button" onclick="App.switchAuthTab('forgot')" class="text-primary hover:underline font-semibold">
+              Forgot password?
+            </button>
+          </div>
+          <div id="login-status"></div>
+          <button id="login-submit-btn" type="submit" class="w-full py-2.5 bg-met-red hover:bg-met-red-dark text-white rounded-lg font-bold shadow-md transition-all active:scale-[0.98]">
             Secure Login
           </button>
         </form>
 
-        <div class="pt-2 border-t border-outline-variant space-y-2">
-          <span class="text-[11px] font-mono text-outline uppercase font-bold">Quick Demo Credentials (Strictly 2 Roles):</span>
+        <!-- Google Sign-In -->
+        <div id="google-signin-btn" class="hidden"></div>
+
+        <!-- Demo Login Panel (visible when DEMO_MODE=true) -->
+        <div id="demo-login-panel" class="hidden pt-3 border-t border-outline-variant space-y-2">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-[11px] font-mono text-emerald-700 uppercase font-bold">Demo Mode — One-Click Login</span>
+          </div>
+          <div class="p-2 bg-blue-50 border border-blue-200 rounded text-[11px] text-blue-800">
+            <strong>Demo Password:</strong> <code class="bg-white px-1.5 py-0.5 rounded border text-xs select-all">Demo@1234</code> (for manual login)
+          </div>
           <div class="space-y-1">
-            <button onclick="App.switchUser('usr_hod_01'); App.closeAuthModal();" class="w-full p-2 bg-surface hover:bg-surface-container rounded border border-outline-variant text-left flex items-center justify-between">
+            <button onclick="Auth.demoLogin('usr_hod_01')" class="w-full p-2 bg-surface hover:bg-red-50 rounded border border-outline-variant text-left flex items-center justify-between transition-colors group">
               <div>
                 <strong class="text-met-red">HOD:</strong> Prof. Nilesh Bread
-                <div class="text-[10px] text-outline font-mono">hod@met.edu (Active)</div>
+                <div class="text-[10px] text-outline font-mono">hod@met.edu</div>
               </div>
-              <span class="text-[10px] font-bold text-met-red bg-red-50 px-1.5 py-0.5 rounded">LOGIN AS HOD →</span>
+              <span class="text-[10px] font-bold text-met-red bg-red-100 group-hover:bg-red-200 px-2 py-0.5 rounded transition-colors">LOGIN →</span>
             </button>
 
-            <button onclick="App.switchUser('usr_fac_01'); App.closeAuthModal();" class="w-full p-2 bg-surface hover:bg-surface-container rounded border border-outline-variant text-left flex items-center justify-between">
+            <button onclick="Auth.demoLogin('usr_fac_01')" class="w-full p-2 bg-surface hover:bg-blue-50 rounded border border-outline-variant text-left flex items-center justify-between transition-colors group">
               <div>
                 <strong class="text-primary">Faculty:</strong> Prof. Shubhangi Phade
-                <div class="text-[10px] text-outline font-mono">shubhangi@met.edu (Active)</div>
+                <div class="text-[10px] text-outline font-mono">shubhangi@met.edu</div>
               </div>
-              <span class="text-[10px] font-bold text-primary bg-blue-50 px-1.5 py-0.5 rounded">LOGIN AS FACULTY →</span>
+              <span class="text-[10px] font-bold text-primary bg-blue-100 group-hover:bg-blue-200 px-2 py-0.5 rounded transition-colors">LOGIN →</span>
             </button>
 
-            <button onclick="App.switchUser('usr_fac_03');" class="w-full p-2 bg-amber-50 hover:bg-amber-100 rounded border border-amber-200 text-left flex items-center justify-between">
+            <button onclick="Auth.demoLogin('usr_fac_02')" class="w-full p-2 bg-surface hover:bg-blue-50 rounded border border-outline-variant text-left flex items-center justify-between transition-colors group">
               <div>
-                <strong class="text-amber-900">Pending Faculty:</strong> Dr. Rahul Sharma
-                <div class="text-[10px] text-amber-800 font-mono">Status: PENDING_HOD_APPROVAL</div>
+                <strong class="text-primary">Faculty:</strong> Prof. Akshay Kale
+                <div class="text-[10px] text-outline font-mono">akshay@met.edu</div>
               </div>
-              <span class="text-[10px] font-bold text-amber-900 bg-amber-200 px-1.5 py-0.5 rounded">TEST RBAC GATE →</span>
+              <span class="text-[10px] font-bold text-primary bg-blue-100 group-hover:bg-blue-200 px-2 py-0.5 rounded transition-colors">LOGIN →</span>
             </button>
           </div>
         </div>
+      </div>
+
+      <!-- Forgot Password Section -->
+      <div id="auth-forgot-section" class="hidden space-y-3 text-xs">
+        <div class="p-2.5 bg-blue-50 border border-blue-200 rounded text-blue-800 text-[11px]">
+          Enter your institutional email. A password reset link will be sent.
+        </div>
+        <form id="forgotPasswordForm" class="space-y-3">
+          <div>
+            <label for="forgot-email" class="block font-bold text-on-surface mb-1">Email Address</label>
+            <input id="forgot-email" type="email" required placeholder="your.email@met.edu" class="w-full h-9 px-3 bg-surface border border-outline-variant rounded-lg text-on-surface"/>
+          </div>
+          <div id="forgot-password-status"></div>
+          <button type="submit" class="w-full py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold shadow-md transition-all">
+            Send Reset Link
+          </button>
+          <button type="button" onclick="App.switchAuthTab('login')" class="w-full py-1.5 text-primary hover:underline font-semibold text-center">
+            ← Back to Login
+          </button>
+        </form>
       </div>
 
       <!-- Registration Section -->
@@ -1599,22 +1644,22 @@
 
         <form id="facultyRegistrationForm" class="space-y-3">
           <div>
-            <label class="block font-bold text-on-surface mb-1">Full Name <span class="text-red-500">*</span></label>
+            <label for="reg-name" class="block font-bold text-on-surface mb-1">Full Name <span class="text-red-500">*</span></label>
             <input id="reg-name" type="text" required placeholder="e.g. Dr. Priya Patil" class="w-full h-9 px-3 bg-surface border border-outline-variant rounded-lg text-on-surface"/>
           </div>
 
           <div>
-            <label class="block font-bold text-on-surface mb-1">Institutional Email <span class="text-red-500">*</span></label>
+            <label for="reg-email" class="block font-bold text-on-surface mb-1">Institutional Email <span class="text-red-500">*</span></label>
             <input id="reg-email" type="email" required placeholder="priyap_mgmt@met.edu" class="w-full h-9 px-3 bg-surface border border-outline-variant rounded-lg text-on-surface"/>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block font-bold text-on-surface mb-1">Designation</label>
+              <label for="reg-designation" class="block font-bold text-on-surface mb-1">Designation</label>
               <input id="reg-designation" type="text" placeholder="Assistant Professor" class="w-full h-9 px-3 bg-surface border border-outline-variant rounded-lg text-on-surface"/>
             </div>
             <div>
-              <label class="block font-bold text-on-surface mb-1">Department</label>
+              <label for="reg-department" class="block font-bold text-on-surface mb-1">Department</label>
               <select id="reg-department" class="w-full h-9 px-2 bg-surface border border-outline-variant rounded-lg text-on-surface">
                 <option value="Management Studies">Management Studies</option>
               </select>
@@ -1622,11 +1667,17 @@
           </div>
 
           <div>
-            <label class="block font-bold text-on-surface mb-1">Create Password</label>
-            <input type="password" required value="SecurePass2026!" class="w-full h-9 px-3 bg-surface border border-outline-variant rounded-lg text-on-surface"/>
+            <label for="reg-password" class="block font-bold text-on-surface mb-1">Create Password <span class="text-red-500">*</span></label>
+            <div class="relative">
+              <input id="reg-password" type="password" required minlength="8" placeholder="Min 8 characters" class="w-full h-9 px-3 pr-10 bg-surface border border-outline-variant rounded-lg text-on-surface"/>
+              <button type="button" onclick="Auth.togglePasswordVisibility('reg-password', this)" class="absolute right-2 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              </button>
+            </div>
           </div>
 
-          <button type="submit" class="w-full py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold shadow-md transition-all">
+          <div id="register-status"></div>
+          <button id="register-submit-btn" type="submit" class="w-full py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold shadow-md transition-all">
             Submit Registration to HOD
           </button>
         </form>
